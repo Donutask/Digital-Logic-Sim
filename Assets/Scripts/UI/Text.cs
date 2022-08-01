@@ -7,12 +7,23 @@ public class Text : MonoBehaviour
 {
     public string id;
 
-    void Update()
-    {
-        Localiation transl = GameObject.Find("Translation").GetComponent<Localiation>();
-        TMP_Text text = GetComponent<TMP_Text>();
-        //text.font = 
+    Localiation transl;
+    TMP_Text text;
 
-        text.text = transl.GetText(id);
+    private void Start()
+    {
+        transl = GameObject.Find("Translation").GetComponent<Localiation>();
+        text = GetComponentInChildren<TMP_Text>();
+    }
+
+    private void OnEnable()
+    {
+        UpdateText();
+    }
+
+    void UpdateText()
+    {
+        if (text != null && transl != null)
+            text.text = transl.GetText(id);
     }
 }

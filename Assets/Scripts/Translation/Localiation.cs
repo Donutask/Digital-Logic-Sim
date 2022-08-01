@@ -4,6 +4,7 @@ using System.Collections;
 using System.Reflection;
 using UnityEngine;
 using System.IO;
+using TMPro;
 
 public class Localiation : MonoBehaviour
 {
@@ -15,7 +16,7 @@ public class Localiation : MonoBehaviour
     }
 
     public List<Translation> translations = new List<Translation>();
-    
+
     public string selectedLanguage = "English";
     public List<string> avaibleLanguages = new List<string>();
     string directoryPath = "";
@@ -25,7 +26,7 @@ public class Localiation : MonoBehaviour
     void Awake()
     {
         DontDestroyOnLoad(gameObject);
-        
+
         if (PlayerPrefs.GetString("selectedLanguage") != "")
             selectedLanguage = PlayerPrefs.GetString("selectedLanguage");
 
@@ -35,9 +36,9 @@ public class Localiation : MonoBehaviour
 
         //Debug.Log(info);
         //Debug.Log(info.Length);
-        
-        foreach (FileInfo f in info) 
-        {   
+
+        foreach (FileInfo f in info)
+        {
             string filePath = f.ToString();
             //Debug.Log(filePath);
 
@@ -46,17 +47,17 @@ public class Localiation : MonoBehaviour
 
             avaibleLanguages.Add(Path.GetFileNameWithoutExtension(filePath));
 
-            StreamReader reader = new StreamReader(filePath); 
-            Debug.Log(reader.ReadToEnd());
+            StreamReader reader = new StreamReader(filePath);
+            //Debug.Log(reader.ReadToEnd());
             reader.Close();
-        } 
+        }
 
         //int lines = File.ReadAllLines(directoryPath + selectedLanguage + ".txt").Length;
-        string[] lines = System.IO.File.ReadAllLines(directoryPath + selectedLanguage + ".txt");
+        string[] lines = File.ReadAllLines(directoryPath + selectedLanguage + ".txt");
         for (int i = 0; i < lines.Length; i++)
         {
             Translation translation = new Translation();
-            
+
             //Debug.Log(lines[i]);
             string[] normalText = lines[i].Split(char.Parse("="));
             string[] colorfulText = Regex.Split(lines[i], @"\=\-");
@@ -64,14 +65,14 @@ public class Localiation : MonoBehaviour
             translation.id = normalText[0];
             if (normalText.Length == 2)
                 translation.text = normalText[1];
-            
+
             else if (normalText.Length > 2)
                 translation.text = colorfulText[1];
 
-            translations.Add(translation); 
-        }    
+            translations.Add(translation);
+        }
 
-        langButton.transform.GetComponentInChildren<TMPro.TMP_Text> ().text = selectedLanguage;
+        langButton.transform.GetComponentInChildren<TMP_Text>().text = selectedLanguage;
     }
 
     public string GetText(string id)
@@ -97,7 +98,7 @@ public class Localiation : MonoBehaviour
         Debug.Log(avaibleLanguages.Count);
         selectedLanguage = avaibleLanguages[nextLanguage];
         PlayerPrefs.SetString("selectedLanguage", selectedLanguage);
-        langButton.transform.GetComponentInChildren<TMPro.TMP_Text> ().text = selectedLanguage;
+        langButton.transform.GetComponentInChildren<TMP_Text>().text = selectedLanguage;
     }
 
 }

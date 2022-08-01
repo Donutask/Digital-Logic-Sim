@@ -6,53 +6,68 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 
-public class ButtonText : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler {
+public class ButtonText : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+{
 
-	public Button button;
-	public TMPro.TMP_Text buttonText;
-	public Color normalCol = Color.white;
-	public Color nonInteractableCol = Color.grey;
-	public Color highlightedCol = Color.white;
-	bool highlighted;
+    public Button button;
+    public TMPro.TMP_Text buttonText;
+    public Color normalCol = Color.white;
+    public Color nonInteractableCol = Color.grey;
+    public Color highlightedCol = Color.white;
+    bool highlighted;
 
-	new string name;
+    new string name;
 
-	public ChipDelete _chipDelete;
+    public ChipDelete _chipDelete;
 
-	void Start () {
-		_chipDelete = GameObject.FindWithTag("Manager").GetComponent<ChipDelete>();
-		name = gameObject.name;
-	}
+    void Start()
+    {
+        var manager = GameObject.FindWithTag("Manager");
+        if (manager != null)
+        {
+            _chipDelete = manager.GetComponent<ChipDelete>();
+        }
+        name = gameObject.name;
+    }
 
-	void Update () {
-		Color col = (highlighted) ? highlightedCol : normalCol;
-		buttonText.color = (button.interactable) ? col : nonInteractableCol;
-		if (Input.GetKeyDown(KeyCode.Delete) && highlighted)
-		{
-			_chipDelete.ConfirmDelete(name);
-		}
-	}
+    void Update()
+    {
+        Color col = (highlighted) ? highlightedCol : normalCol;
+        buttonText.color = (button.interactable) ? col : nonInteractableCol;
 
-	public void OnPointerEnter (PointerEventData eventData) {
-		if (button.interactable) {
-			highlighted = true;
-		}
-	}
+        if (Input.GetKeyDown(KeyCode.Delete) && highlighted && _chipDelete != null)
+        {
+            _chipDelete.ConfirmDelete(name);
+        }
+    }
 
-	public void OnPointerExit (PointerEventData eventData) {
-		highlighted = false;
-	}
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (button.interactable)
+        {
+            highlighted = true;
+        }
+    }
 
-	void OnEnable () {
-		highlighted = false;
-	}
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        highlighted = false;
+    }
 
-	void OnValidate () {
-		if (button == null) {
-			button = GetComponent<Button> ();
-		}
-		if (buttonText == null) {
-			buttonText = transform.GetComponentInChildren<TMPro.TMP_Text> ();
-		}
-	}
+    void OnEnable()
+    {
+        highlighted = false;
+    }
+
+    void OnValidate()
+    {
+        if (button == null)
+        {
+            button = GetComponent<Button>();
+        }
+        if (buttonText == null)
+        {
+            buttonText = transform.GetComponentInChildren<TMPro.TMP_Text>();
+        }
+    }
 }
