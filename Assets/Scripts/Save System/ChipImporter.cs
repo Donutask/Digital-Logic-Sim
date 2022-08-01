@@ -10,7 +10,7 @@ public class ChipImporter : MonoBehaviour
 {
     //List of all used chips in a chip
     private List<SavedComponentChip> usedChips = new List<SavedComponentChip>();
-    private List<String> usedChipsPaths = new List<String>();
+    private List<string> usedChipsPaths = new List<string>();
 
     //All infos about the chip (at first the chip selected in the FileBrowser, then its components)
     private SavedChip chip;
@@ -19,19 +19,15 @@ public class ChipImporter : MonoBehaviour
     private string chipWireLayoutSaveString;
     private string chipName;
 
-
     //Destinations Paths
     private string destination;
     private string wireLayoutDestination;
 
     private bool tester;
-    private Dictionary<String, List<string>> chipInfos = new Dictionary<string, List<string>>();
+    private Dictionary<string, List<string>> chipInfos = new Dictionary<string, List<string>>();
 
     public void OpenFileBrowser()
     {
-        //FileBrowser.SetFilters(false, ".txt");
-        //FileBrowser.ShowLoadDialog((path) => { Import(path); }, null, FileBrowser.PickMode.Files, false, SaveSystem.GlobalDirectoryPath, null, "Load Chip Save File", "Load");
-
         string[] paths = StandaloneFileBrowser.OpenFilePanel("Load Chip Save File", SaveSystem.GlobalDirectoryPath, "txt", false);
         if (paths.Length == 1)
             Import(paths[0]);
