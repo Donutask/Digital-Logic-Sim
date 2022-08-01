@@ -7,6 +7,7 @@ public class ChipInteraction : InteractionHandler
     public enum State { None, PlacingNewChips, MovingOldChips, SelectingChips }
     public event System.Action<Chip> onDeleteChip;
 
+    Zoom zoomManager;
     public PinAndWireInteraction pinAndWireInteraction;
     public BoxCollider2D chipArea;
     public Transform chipHolder;
@@ -42,6 +43,7 @@ public class ChipInteraction : InteractionHandler
         selectedChips = new List<Chip>();
         allChips = new List<Chip>();
         MeshShapeCreator.CreateQuadMesh(ref selectionMesh);
+        zoomManager = GameObject.Find("Manager").GetComponent<Zoom>();
     }
 
     public override void OrderedUpdate()
@@ -99,6 +101,10 @@ public class ChipInteraction : InteractionHandler
 
             var newChip = Instantiate(chipPrefab, parent: chipHolder);
             newChip.gameObject.SetActive(true);
+
+            if (zoomManager != null)
+                newChip.transform.localScale = zoomManager.scale;
+
             selectedChips.Add(newChip);
             newChipsToPlace.Add(newChip);
             newChip.InitSimulationFrame();
