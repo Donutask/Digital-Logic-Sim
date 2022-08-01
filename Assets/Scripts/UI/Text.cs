@@ -14,6 +14,8 @@ public class Text : MonoBehaviour
     {
         transl = GameObject.Find("Translation").GetComponent<Localiation>();
         text = GetComponentInChildren<TMP_Text>();
+
+        UpdateText();
     }
 
     private void OnEnable()

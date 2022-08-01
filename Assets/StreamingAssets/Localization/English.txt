@@ -34,3 +34,4 @@ Back=BACK
 Fullscreen=Fullscreen
 Credits=CREDITS
 Project_Name=PROJECT NAME
+No_Projects=No Projects Found
