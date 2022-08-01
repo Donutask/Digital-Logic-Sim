@@ -28,7 +28,8 @@ public class ChipLoader
         for (int i = 0; i < manager.builtinChips.Length; i++)
         {
             Chip builtinChip = manager.builtinChips[i];
-            loadedChips.Add(builtinChip.chipName, builtinChip);
+            if (builtinChip != null)
+                loadedChips.Add(builtinChip.chipName, builtinChip);
         }
 
         for (int i = 0; i < savedChips.Length; i++)
