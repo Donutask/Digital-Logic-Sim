@@ -198,12 +198,18 @@ public class EditChips : MonoBehaviour
         return validTransforms.ToArray();
     }
 
+    /// <summary>
+    /// True if chipName is in the Manager.builtinchips list
+    /// </summary>
     bool IsBuiltInChipName(string chipName)
     {
-        string[] builInNames = { "AND", "NOT", "CLOCK", "SCREEN", "7SEG DISP", "SYMB", "KEY", "RAND" };
-        foreach (string builInName in builInNames)
+        foreach (var item in manager.builtinChips)
         {
-            if (chipName == builInName)
+            if (item == null)
+            {
+                continue;
+            }
+            if (chipName == item.chipName)
             {
                 return true;
             }
