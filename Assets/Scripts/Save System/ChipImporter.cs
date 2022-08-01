@@ -4,11 +4,10 @@ using System.Linq;
 using System.IO;
 using System;
 using UnityEngine;
-using SimpleFileBrowser;
+using SFB;
 
 public class ChipImporter : MonoBehaviour
 {
-
     //List of all used chips in a chip
     private List<SavedComponentChip> usedChips = new List<SavedComponentChip>();
     private List<String> usedChipsPaths = new List<String>();
@@ -25,30 +24,30 @@ public class ChipImporter : MonoBehaviour
     private string destination;
     private string wireLayoutDestination;
 
-    private int i;
     private bool tester;
     private Dictionary<String, List<string>> chipInfos = new Dictionary<string, List<string>>();
 
-
     public void OpenFileBrowser()
     {
-        FileBrowser.SetFilters(false, ".txt");
-        FileBrowser.ShowLoadDialog((path) => { Import(path); }, null, FileBrowser.PickMode.Files, false, SaveSystem.GlobalDirectoryPath, null, "Load Chip Save File", "Load") ;
+        //FileBrowser.SetFilters(false, ".txt");
+        //FileBrowser.ShowLoadDialog((path) => { Import(path); }, null, FileBrowser.PickMode.Files, false, SaveSystem.GlobalDirectoryPath, null, "Load Chip Save File", "Load");
 
+        string[] paths = StandaloneFileBrowser.OpenFilePanel("Load Chip Save File", SaveSystem.GlobalDirectoryPath, "txt", false);
+        if (paths.Length == 1)
+            Import(paths[0]);
     }
-   
+
     // Import the save files
-    void Import(string[] paths)
+    void Import(string path)
     {
         chipInfos.Clear();
-        string path = paths[paths.Count() - 1];
         var manager = new Manager();
         tester = true;
         GetChipInfoByPath(path);
         List<SavedChip> savedChips = GetListOfSavedChips(chipInfos);
         savedChips = SortChipsByOrderOfCreation(savedChips);
         List<string> savedChipsPaths = new List<string>();
-        foreach(SavedChip thisChip in savedChips)
+        foreach (SavedChip thisChip in savedChips)
         {
             savedChipsPaths.Add(Path.Combine(SaveSystem.GlobalDirectoryPath, thisChip.name + ".txt"));
             print(savedChipsPaths);
@@ -66,12 +65,9 @@ public class ChipImporter : MonoBehaviour
 
                 throw;
             }
-            
-            
         }
 
         manager.RefreshAll();
-
     }
 
     static List<SavedChip> SortChipsByOrderOfCreation(List<SavedChip> chips)
@@ -93,7 +89,7 @@ public class ChipImporter : MonoBehaviour
     {
         List<SavedChip> chipsList = new List<SavedChip>();
 
-        foreach(string thisPath in dict.Keys)
+        foreach (string thisPath in dict.Keys)
         {
             Debug.Log(thisPath);
             chipsList.Add(GetSavedChipByPath(thisPath));
@@ -113,9 +109,9 @@ public class ChipImporter : MonoBehaviour
 
         chipName = chip.name;
 
-        if(tester)
+        if (tester)
         {
-            chipPath  = Path.Combine(SaveSystem.GlobalDirectoryPath, chipName + ".txt");
+            chipPath = Path.Combine(SaveSystem.GlobalDirectoryPath, chipName + ".txt");
             tester = false;
         }
 
@@ -127,12 +123,12 @@ public class ChipImporter : MonoBehaviour
         destination = Path.Combine(SaveSystem.CurrentSaveProfileDirectoryPath, chipName + ".txt");
         wireLayoutDestination = Path.Combine(SaveSystem.CurrentSaveProfileWireLayoutDirectoryPath, chipName + ".txt");
 
-        if(!chipInfos.ContainsKey(chipPath))
+        if (!chipInfos.ContainsKey(chipPath))
         {
             chipInfos.Add(chipPath, new List<string>() { wireLayoutDestination, destination, chipSaveString, chipWireLayoutSaveString });
-        }            
-    
-    
+        }
+
+
         if (usedChips != null)
         {
             if (usedChips.Count >= 1)
@@ -141,7 +137,7 @@ public class ChipImporter : MonoBehaviour
             }
         }
     }
-    
+
     //Get the useful info from components chip
     private void GetUsedChipsInfos(List<SavedComponentChip> usedChipsList)
     {
@@ -152,7 +148,7 @@ public class ChipImporter : MonoBehaviour
             usedChipsPaths.Add(SaveSystem.GetPathToGlobalSaveFile(chipName));
             if (IsValidChipName(chipName))
             {
-                GetChipInfoByPath(usedChipsPaths[usedChipsPaths.Count - 1]); 
+                GetChipInfoByPath(usedChipsPaths[usedChipsPaths.Count - 1]);
             }
         }
     }
